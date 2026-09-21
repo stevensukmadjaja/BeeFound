@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>BeeFound Login</title>
+
+    <!-- FAVICON -->
+
+    <link
+        rel="icon"
+        href="{{ url_for('static', filename='img/bee.png') }}"
+    >
+
+    <!-- GOOGLE FONT -->
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet"
+    >
+
+    <!-- FONT AWESOME -->
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <!-- MAIN CSS -->
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+
+</head>
+
+<body class="auth-body">
+
+    <!-- ================= FLASH MESSAGE ================= -->
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+
+        {% if messages %}
+
+            <div class="flash-wrapper">
+
+                {% for category, message in messages %}
+
+                    <div class="flash-message {{ category }}">
+
+                        {% if category == "success" %}
+
+                            <i class="fa-solid fa-circle-check"></i>
+
+                        {% else %}
+
+                            <i class="fa-solid fa-circle-exclamation"></i>
+
+                        {% endif %}
+
+                        <span>
+
+                            {{ message }}
+
+                        </span>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+    {% endwith %}
+
+
+    <!-- ================= INTERACTIVE BACKGROUND ================= -->
+
+    <div class="bg-animation">
+
+        <div class="floating-blob blob-1"></div>
+
+        <div class="floating-blob blob-2"></div>
+
+        <div class="floating-blob blob-3"></div>
+
+        <div
+            class="mouse-glow"
+            id="mouseGlow"
+        ></div>
+
+    </div>
+
+
+    <!-- ================= LOGIN PAGE ================= -->
+
+    <div class="login-page">
+
+        <div class="login-card">
+
+            <!-- TITLE -->
+
+            <h1 class="login-title">
+
+                <span class="bee">
+                    Bee
+                </span>
+
+                <span class="found">
+                    Found
+                </span>
+
+            </h1>
+
+            <!-- SUBTITLE -->
+
+            <p class="login-subtitle">
+
+                Reconnect with your lost belongings safely and quickly.
+
+            </p>
+
+            <!-- LOGIN FORM -->
+
+            <form
+                method="POST"
+                class="login-form"
+            >
+
+                <!-- USERNAME -->
+
+                <div class="input-group">
+
+                    <i class="fa-regular fa-user input-icon"></i>
+
+                    <input
+                        type="text"
+                        name="username"
+                        placeholder="Username"
+                        required
+                    >
+
+                </div>
+
+                <!-- PASSWORD -->
+
+                <div class="input-group password-group">
+
+                    <i class="fa-solid fa-lock input-icon"></i>
+
+                    <input
+                        type="password"
+                        name="password"
+                        placeholder="Password"
+                        id="passwordInput"
+                        required
+                    >
+
+                    <i
+                        class="fa-regular fa-eye toggle-password"
+                        id="togglePassword"
+                    ></i>
+
+                </div>
+
+                <!-- BUTTON -->
+
+                <button
+                    type="submit"
+                    class="login-btn"
+                >
+
+                    <i class="fa-solid fa-right-to-bracket"></i>
+
+                    <span>
+                        Login
+                    </span>
+
+                </button>
+
+            </form>
+
+            <!-- DIVIDER -->
+
+            <div class="auth-divider">
+
+                <span>
+                    or
+                </span>
+
+            </div>
+
+            <!-- REGISTER LINK -->
+
+            <p class="register-link">
+
+                Don't have an account?
+
+                <a href="/register">
+
+                    Register
+
+                </a>
+
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <!-- ================= SCRIPT ================= -->
+
+    <script>
+
+        /* ================= PASSWORD TOGGLE ================= */
+
+        const toggle_password =
+            document.getElementById(
+                "togglePassword"
+            );
+
+        const password_input =
+            document.getElementById(
+                "passwordInput"
+            );
+
+        if (
+            toggle_password &&
+            password_input
+        ) {
+
+            toggle_password.addEventListener(
+                "click",
+                function () {
+
+                    const current_type =
+                        password_input.getAttribute(
+                            "type"
+                        );
+
+                    const new_type =
+                        current_type === "password"
+                            ? "text"
+                            : "password";
+
+                    password_input.setAttribute(
+                        "type",
+                        new_type
+                    );
+
+                    this.classList.toggle(
+                        "fa-eye"
+                    );
+
+                    this.classList.toggle(
+                        "fa-eye-slash"
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* ================= MOUSE GLOW ================= */
+
+        const mouse_glow =
+            document.getElementById(
+                "mouseGlow"
+            );
+
+        document.addEventListener(
+            "mousemove",
+            function (e) {
+
+                if (mouse_glow) {
+
+                    mouse_glow.style.left =
+                        `${e.clientX}px`;
+
+                    mouse_glow.style.top =
+                        `${e.clientY}px`;
+
+                }
+
+            }
+        );
+
+
+        /* ================= AUTO REMOVE FLASH ================= */
+
+        setTimeout(function(){
+
+            const flash_messages =
+                document.querySelectorAll(
+                    ".flash-message"
+                );
+
+            flash_messages.forEach(
+                function(message){
+
+                    message.classList.add(
+                        "flash-hide"
+                    );
+
+                }
+            );
+
+        }, 3500);
+
+    </script>
+
+</body>
+
+</html>

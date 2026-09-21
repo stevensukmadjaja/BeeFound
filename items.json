@@ -1,0 +1,206 @@
+[
+    {
+        "id": "6bb28e23-5943-4302-84aa-2ba030d0ee85",
+        "title": "dwadaw",
+        "description": "dwadwa",
+        "category": "Clothing",
+        "location": "dwad",
+        "status": "Lost",
+        "contact": "dwadwa",
+        "resolved": true,
+        "image": "8764e762-c2b5-440a-850a-0287e4dd3679_Apple-iPhone-17-Pro-Max-Cosmic-Orange.webp",
+        "comments": [
+            {
+                "user": "nicho",
+                "text": "dwadaw",
+                "time": "2026-05-25 12:49"
+            },
+            {
+                "user": "nicho",
+                "text": "halo",
+                "time": "2026-05-25 12:49"
+            },
+            {
+                "user": "nicho",
+                "text": "dwada",
+                "time": "2026-05-25 12:49"
+            },
+            {
+                "user": "nicho",
+                "text": "dwadaw",
+                "time": "2026-05-25 12:49"
+            }
+        ],
+        "owner": "nicho",
+        "resolved_time": "2026-05-25T12:50:14.152304",
+        "claimed_by": "Resolved by Admin",
+        "pickup_time": "2026-05-25 12:50"
+    },
+    {
+        "id": "00dce0e8-c392-4615-bc55-7ae6ce2e4732",
+        "title": "dwad",
+        "description": "dwadaw",
+        "category": "Accessories",
+        "location": "dwad",
+        "status": "Lost",
+        "contact": "dwada",
+        "resolved": true,
+        "image": "",
+        "comments": [
+            {
+                "user": "admin",
+                "text": "dwadaw",
+                "time": "2026-05-25 12:24"
+            },
+            {
+                "user": "admin",
+                "text": "dwada",
+                "time": "2026-05-25 12:25"
+            }
+        ],
+        "owner": "admin",
+        "resolved_time": "2026-05-25T12:50:28.724742",
+        "claimed_by": "Resolved by Admin",
+        "pickup_time": "2026-05-25 12:50"
+    },
+    {
+        "id": "89e87fe6-f4c7-4ce4-9baf-7c729baea93a",
+        "title": "dwad",
+        "description": "dwadwa",
+        "category": "Documents",
+        "location": "dwada",
+        "status": "Lost",
+        "contact": "dwadwa",
+        "resolved": true,
+        "image": "",
+        "comments": [
+            {
+                "user": "test",
+                "text": "dwad",
+                "time": "2026-05-25 12:18"
+            },
+            {
+                "user": "test",
+                "text": "dwad",
+                "time": "2026-05-25 12:18"
+            }
+        ],
+        "owner": "test",
+        "resolved_time": "2026-05-25T12:20:26.542826",
+        "claimed_by": "Resolved by Admin",
+        "pickup_time": "2026-05-25 12:20"
+    },
+    {
+        "id": "1679ed3d-957f-4194-b5c1-a2e13ffa491e",
+        "title": "dwadaw",
+        "description": "dawdwa",
+        "category": "Electronics",
+        "location": "dwadaw",
+        "status": "Lost",
+        "contact": "dawdwa",
+        "resolved": true,
+        "comments": [
+            {
+                "user": "user",
+                "text": "dwad",
+                "time": "2026-05-11 14:31"
+            },
+            {
+                "user": "user",
+                "text": "dwadaw",
+                "time": "2026-05-11 14:31"
+            },
+            {
+                "user": "user",
+                "text": "dwa",
+                "time": "2026-05-11 14:31"
+            },
+            {
+                "user": "user",
+                "text": "da",
+                "time": "2026-05-11 14:31"
+            },
+            {
+                "user": "admin",
+                "text": "botol nya ada namanya ga",
+                "time": "2026-05-11 15:33"
+            }
+        ],
+        "resolved_time": "2026-05-11T15:33:45.447727",
+        "claimed_by": "Resolved by Admin",
+        "pickup_time": "2026-05-11 15:33"
+    },
+    {
+        "id": "1688c26b-6001-43c0-825b-395020960992",
+        "title": "dwad",
+        "description": "dwad",
+        "category": "Electronics",
+        "location": "dwadaw",
+        "status": "Lost",
+        "contact": "dwadaw",
+        "resolved": true,
+        "comments": [
+            {
+                "user": "user",
+                "text": "dwada",
+                "time": "2026-05-11 14:16"
+            },
+            {
+                "user": "user",
+                "text": "dwa",
+                "time": "2026-05-11 14:16"
+            },
+            {
+                "user": "user",
+                "text": "dwada",
+                "time": "2026-05-11 14:23"
+            },
+            {
+                "user": "user",
+                "text": "dwada",
+                "time": "2026-05-11 14:23"
+            },
+            {
+                "user": "user",
+                "text": "dwada",
+                "time": "2026-05-11 14:25"
+            },
+            {
+                "user": "user",
+                "text": "dwada",
+                "time": "2026-05-11 14:25"
+            }
+        ],
+        "resolved_time": "2026-05-11T14:29:04.940655",
+        "claimed_by": "Resolved by Admin",
+        "pickup_time": "2026-05-11 14:29"
+    },
+    {
+        "id": "34c9f9ef-0bff-4699-ba2a-8b5ab116534c",
+        "title": "dwa",
+        "description": "dwa",
+        "category": "Electronics",
+        "location": "dwa",
+        "status": "Lost",
+        "contact": "dwad",
+        "resolved": true,
+        "comments": [],
+        "resolved_time": "2026-05-11T14:15:33.021471",
+        "claimed_by": "Resolved by Admin",
+        "pickup_time": "2026-05-11 14:15"
+    },
+    {
+        "id": "670e5c0c-f561-4b5f-817d-507438a75cc9",
+        "title": "dwadawd",
+        "description": "dwadwa",
+        "category": "Electronics",
+        "location": "dwadaw",
+        "status": "Lost",
+        "contact": "dwada",
+        "resolved": true,
+        "claimed_by": "dwada",
+        "nim": "dwadaw",
+        "pickup_time": "2026-03-02T11:22",
+        "resolved_time": "2026-03-02T11:23:00.478814"
+    }
+]

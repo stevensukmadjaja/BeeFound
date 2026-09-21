@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0"
+>
+
+<title>
+BeeFound Admin Dashboard
+</title>
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}"
+>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body class="admin-page">
+
+<div class="admin-container">
+
+<!-- ================= TITLE ================= -->
+
+<h1 class="admin-title">
+
+<i class="fa-solid fa-chart-line"></i>
+
+Admin Dashboard
+
+</h1>
+
+<!-- ================= STATS ================= -->
+
+<div class="dashboard-grid">
+
+<div class="dashboard-card">
+
+<h3>
+Total Users
+</h3>
+
+<p>
+{{ total_users }}
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>
+Total Reports
+</h3>
+
+<p>
+{{ total_items }}
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>
+Lost Items
+</h3>
+
+<p>
+{{ total_lost }}
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>
+Found Items
+</h3>
+
+<p>
+{{ total_found }}
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>
+Resolved Items
+</h3>
+
+<p>
+{{ total_resolved }}
+</p>
+
+</div>
+
+<div class="dashboard-card">
+
+<h3>
+Comments
+</h3>
+
+<p>
+{{ total_comments }}
+</p>
+
+</div>
+
+</div>
+
+<!-- ================= CHARTS ================= -->
+
+<div class="charts-grid">
+
+<!-- PIE CHART -->
+
+<div class="chart-card">
+
+<h2>
+Lost vs Found
+</h2>
+
+<canvas id="statusChart"></canvas>
+
+</div>
+
+<!-- BAR CHART -->
+
+<div class="chart-card">
+
+<h2>
+Category Distribution
+</h2>
+
+<canvas id="categoryChart"></canvas>
+
+</div>
+
+<!-- LINE CHART -->
+
+<div class="chart-card full-width-chart">
+
+<h2>
+Reports This Week
+</h2>
+
+<canvas id="trendChart"></canvas>
+
+</div>
+
+</div>
+
+<!-- ================= RECENT REPORTS ================= -->
+
+<h2 class="dashboard-section-title">
+
+Recent Reports
+
+</h2>
+
+<div class="dashboard-list">
+
+{% for item in recent_items %}
+
+<div class="dashboard-item">
+
+<strong>
+{{ item.title }}
+</strong>
+
+<p>
+Category: {{ item.category }}
+</p>
+
+<span>
+{{ item.status }}
+</span>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<!-- ================= RECENT COMMENTS ================= -->
+
+<h2 class="dashboard-section-title">
+
+Recent Comments
+
+</h2>
+
+<div class="dashboard-list">
+
+{% for comment in recent_comments %}
+
+<div class="dashboard-item">
+
+<strong>
+{{ comment.username }}
+</strong>
+
+<p>
+{{ comment.text }}
+</p>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+<!-- ================= BACK BUTTON ================= -->
+
+<a
+href="/"
+class="dashboard-back"
+>
+
+<i class="fa-solid fa-arrow-left"></i>
+
+Back to Home
+
+</a>
+
+</div>
+
+<!-- ================= CHART SCRIPT ================= -->
+
+<script>
+
+/* ================= SAFE DATA ================= */
+
+const categories = JSON.parse(
+    '{{ categories | default([]) | tojson | safe }}'
+);
+
+const category_counts = JSON.parse(
+    '{{ category_counts | default([]) | tojson | safe }}'
+);
+
+const trend_labels = JSON.parse(
+    '{{ trend_labels | default([]) | tojson | safe }}'
+);
+
+const trend_counts = JSON.parse(
+    '{{ trend_counts | default([]) | tojson | safe }}'
+);
+
+const total_lost = Number(
+    '{{ total_lost | default(0) }}'
+);
+
+const total_found = Number(
+    '{{ total_found | default(0) }}'
+);
+
+/* ================= STATUS CHART ================= */
+
+const status_chart =
+document.getElementById(
+    "statusChart"
+);
+
+if(status_chart){
+
+    new Chart(
+
+        status_chart,
+
+        {
+
+            type:"pie",
+
+            data:{
+
+                labels:[
+
+                    "Lost",
+                    "Found"
+
+                ],
+
+                datasets:[{
+
+                    data:[
+
+                        total_lost,
+                        total_found
+
+                    ],
+
+                    backgroundColor:[
+
+                        "#F87171",
+                        "#34D399"
+
+                    ]
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true
+
+            }
+
+        }
+
+    );
+
+}
+
+/* ================= CATEGORY CHART ================= */
+
+const category_chart =
+document.getElementById(
+    "categoryChart"
+);
+
+if(category_chart){
+
+    new Chart(
+
+        category_chart,
+
+        {
+
+            type:"bar",
+
+            data:{
+
+                labels:categories,
+
+                datasets:[{
+
+                    label:"Items",
+
+                    data:category_counts,
+
+                    backgroundColor:"#FACC15"
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                scales:{
+
+                    y:{
+
+                        beginAtZero:true
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    );
+
+}
+
+/* ================= TREND CHART ================= */
+
+const trend_chart =
+document.getElementById(
+    "trendChart"
+);
+
+if(trend_chart){
+
+    new Chart(
+
+        trend_chart,
+
+        {
+
+            type:"line",
+
+            data:{
+
+                labels:trend_labels,
+
+                datasets:[{
+
+                    label:"Reports",
+
+                    data:trend_counts,
+
+                    borderColor:"#FACC15",
+
+                    backgroundColor:
+                    "rgba(250,204,21,0.2)",
+
+                    tension:0.35,
+
+                    fill:true
+
+                }]
+
+            },
+
+            options:{
+
+                responsive:true,
+
+                scales:{
+
+                    y:{
+
+                        beginAtZero:true
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    );
+
+}
+
+</script>
+
+</body>
+
+</html>

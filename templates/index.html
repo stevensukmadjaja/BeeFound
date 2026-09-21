@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>BeeFound</title>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link
+rel="icon"
+type="image/png"
+href="{{ url_for('static', filename='img/bee.png') }}"
+>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link
+href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap"
+rel="stylesheet"
+>
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', filename='css/style.css') }}"
+>
+
+<link
+rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+>
+
+</head>
+
+<body>
+
+<!-- ================= FLASH MESSAGE ================= -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+    {% if messages %}
+
+        <div class="flash-wrapper">
+
+            {% for category, message in messages %}
+
+                <div class="flash-message {{ category }}">
+
+                    {% if category == "success" %}
+
+                        <i class="fa-solid fa-circle-check"></i>
+
+                    {% elif category == "warning" %}
+
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+
+                    {% else %}
+
+                        <i class="fa-solid fa-circle-exclamation"></i>
+
+                    {% endif %}
+
+                    <span>
+
+                        {{ message }}
+
+                    </span>
+
+                </div>
+
+            {% endfor %}
+
+        </div>
+
+    {% endif %}
+
+{% endwith %}
+
+<!-- ================= NAVBAR ================= -->
+
+<nav class="navbar">
+
+    <div class="nav-container">
+
+        <div class="brand">
+
+            <a
+                href="/"
+                class="nav-logo"
+            >
+
+                <img
+                    src="{{ url_for('static', filename='img/logo.png') }}"
+                    alt="BeeFound Logo"
+                >
+
+            </a>
+
+        </div>
+
+        <ul
+            class="nav-links"
+            id="navLinks"
+        >
+
+            <li>
+                <a href="#home">
+                    Home
+                </a>
+            </li>
+
+            <li>
+                <a href="#report">
+                    Report
+                </a>
+            </li>
+
+            <li>
+                <a href="#browse">
+                    Browse
+                </a>
+            </li>
+
+            <li>
+                <a href="#contact">
+                    Contact
+                </a>
+            </li>
+
+            {% if role == "admin" %}
+
+<li>
+
+    <a href="/admin">
+
+        Dashboard
+
+    </a>
+
+</li>
+
+{% endif %}
+
+        </ul>
+
+        <div class="user-section">
+
+            <span class="username">
+
+                <i class="fa-solid fa-user"></i>
+
+                {{ username }}
+
+            </span>
+
+            <form
+                action="/logout"
+                method="GET"
+            >
+
+                <button
+                    type="submit"
+                    class="logout-btn"
+                >
+
+                    Logout
+
+                </button>
+
+            </form>
+
+        </div>
+
+        <div
+            class="hamburger"
+            id="hamburger"
+        >
+
+            ☰
+
+        </div>
+
+    </div>
+
+</nav>
+
+<!-- ================= HERO ================= -->
+
+<section id="home" class="section">
+
+<h1 class="hero-title">
+
+<span class="bee">
+Bee
+</span>
+
+<span class="found">
+Found
+</span>
+
+</h1>
+
+<p class="hero-subtitle">
+Helping you reconnect with what matters.
+</p>
+
+{% if role == "admin" %}
+
+<p class="admin-label">
+Admin Mode
+</p>
+
+{% endif %}
+
+</section>
+
+<!-- ================= REPORT FORM ================= -->
+
+<section id="report" class="section">
+
+<h2 class="section-title">
+Report an Item
+</h2>
+
+<form
+method="POST"
+action="/add"
+class="form-card"
+id="itemForm"
+enctype="multipart/form-data"
+>
+
+<input
+type="text"
+name="title"
+placeholder="Item Title"
+required
+>
+
+<textarea
+name="description"
+placeholder="Description"
+></textarea>
+
+<select name="category" required>
+
+<option value="">
+Select Category
+</option>
+
+<option>Electronics</option>
+
+<option>Documents</option>
+
+<option>Clothing</option>
+
+<option>Accessories</option>
+
+<option>Stationery</option>
+
+<option>Other</option>
+
+</select>
+
+<input
+type="text"
+name="location"
+placeholder="Location"
+required
+>
+
+<select name="status" required>
+
+<option value="">
+Status
+</option>
+
+<option value="Lost">
+Lost
+</option>
+
+{% if role == "admin" %}
+
+<option value="Found">
+Found
+</option>
+
+{% endif %}
+
+</select>
+
+<input
+type="text"
+name="contact"
+placeholder="Contact Info"
+required
+>
+
+<label class="upload-label">
+Upload Item Photo (Optional)
+</label>
+
+<input
+type="file"
+name="image"
+accept="image/*"
+id="imageInput"
+>
+
+<div class="image-preview-container">
+
+<img
+id="imagePreview"
+class="image-preview"
+src=""
+alt="Preview"
+>
+
+<p id="previewText">
+Image Preview
+</p>
+
+</div>
+
+<button
+type="submit"
+id="submitBtn"
+>
+
+<span class="btn-text">
+
+Submit Report
+
+</span>
+
+<span class="btn-loader">
+
+<i class="fa-solid fa-spinner fa-spin"></i>
+
+Uploading...
+
+</span>
+
+</button>
+
+</form>
+
+</section>
+
+<!-- ================= AVAILABLE ITEMS ================= -->
+
+<section id="browse" class="section">
+
+<h2 class="section-title">
+Available Items
+</h2>
+
+<div class="filter-bar">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Search items..."
+class="search-input"
+>
+
+<select id="statusFilter" class="filter-select">
+
+<option value="all">
+All Status
+</option>
+
+<option value="Lost">
+Lost
+</option>
+
+<option value="Found">
+Found
+</option>
+
+</select>
+
+<select id="categoryFilter" class="filter-select">
+
+<option value="all">
+All Categories
+</option>
+
+<option value="Electronics">
+Electronics
+</option>
+
+<option value="Documents">
+Documents
+</option>
+
+<option value="Clothing">
+Clothing
+</option>
+
+<option value="Accessories">
+Accessories
+</option>
+
+<option value="Stationery">
+Stationery
+</option>
+
+<option value="Other">
+Other
+</option>
+
+</select>
+
+</div>
+
+<div class="items-grid">
+
+{% for item in items %}
+
+<div
+class="card searchable-card"
+
+data-title="{{ item.title | lower }}"
+
+data-description="{{ item.description | lower }}"
+
+data-category="{{ item.category }}"
+
+data-status="{{ item.status }}"
+>
+
+<h3>
+{{ item.title }}
+</h3>
+
+{% if item.image %}
+
+<img
+src="{{ url_for('static', filename='uploads/' + item.image) }}"
+class="item-image"
+alt="Item Image"
+>
+
+{% endif %}
+
+<div class="card-info">
+
+<p>
+<strong>Category:</strong>
+{{ item.category }}
+</p>
+
+<p>
+<strong>Location:</strong>
+{{ item.location }}
+</p>
+
+<p>
+<strong>Contact:</strong>
+{{ item.contact }}
+</p>
+
+<p>
+<strong>Description:</strong>
+{{ item.description }}
+</p>
+
+</div>
+
+<span class="badge {{ item.status }}">
+{{ item.status }}
+</span>
+
+{% if item.owner == username or role == "admin" %}
+
+<button
+class="edit-btn"
+
+data-id="{{ item.id }}"
+
+data-title="{{ item.title }}"
+
+data-description="{{ item.description }}"
+
+data-category="{{ item.category }}"
+
+data-location="{{ item.location }}"
+
+data-contact="{{ item.contact }}"
+>
+
+Edit
+
+</button>
+
+{% endif %}
+
+<!-- ================= FORUM ================= -->
+
+<div class="forum">
+
+<h4>
+Discussion
+</h4>
+
+<div class="comments-container">
+
+{% if item.comments %}
+
+{% for c in item.comments %}
+
+<div class="comment">
+
+<strong>
+{{ c.username }}
+</strong>
+
+<p>
+{{ c.text }}
+</p>
+
+<small>
+{{ c.created_at.strftime('%Y-%m-%d %H:%M') }}
+</small>
+
+</div>
+
+{% endfor %}
+
+{% else %}
+
+<p class="no-comments">
+No comments yet
+</p>
+
+{% endif %}
+
+</div>
+
+<form
+class="comment-form"
+data-id="{{ item.id }}"
+>
+
+<input
+type="text"
+name="comment"
+placeholder="Write a comment"
+required
+>
+
+<button type="submit">
+Send
+</button>
+
+</form>
+
+</div>
+
+<!-- ================= ADMIN ACTION ================= -->
+
+{% if role == "admin" %}
+
+<div class="admin-actions">
+
+{% if item.status == "Lost"
+and not item.resolved %}
+
+<form
+action="/resolve/{{ item.id }}"
+method="POST"
+>
+
+<button
+type="submit"
+class="resolve-btn"
+>
+
+Resolve
+
+</button>
+
+</form>
+
+{% endif %}
+
+<form
+action="/delete/{{ item.id }}"
+method="POST"
+>
+
+<button
+type="submit"
+class="delete-btn"
+>
+
+Delete
+
+</button>
+
+</form>
+
+</div>
+
+{% endif %}
+
+</div>
+
+{% endfor %}
+
+<p
+id="emptyState"
+class="empty-state"
+style="display:none;"
+>
+
+No matching items found.
+
+</p>
+
+</div>
+
+</section>
+
+<!-- ================= EDIT MODAL ================= -->
+
+<div
+id="editModal"
+class="modal-overlay"
+style="display:none;"
+>
+
+<div class="modal-box edit-modal">
+
+<h3>
+Edit Item
+</h3>
+
+<form
+id="editForm"
+method="POST"
+enctype="multipart/form-data"
+>
+
+<input
+type="text"
+name="title"
+id="editTitle"
+required
+>
+
+<textarea
+name="description"
+id="editDescription"
+></textarea>
+
+<select
+name="category"
+id="editCategory"
+required
+>
+
+<option>Electronics</option>
+<option>Documents</option>
+<option>Clothing</option>
+<option>Accessories</option>
+<option>Stationery</option>
+<option>Other</option>
+
+</select>
+
+<input
+type="text"
+name="location"
+id="editLocation"
+required
+>
+
+<input
+type="text"
+name="contact"
+id="editContact"
+required
+>
+
+<input
+type="file"
+name="image"
+accept="image/*"
+id="editImageInput"
+>
+
+<div class="image-preview-container">
+
+<img
+id="editImagePreview"
+class="image-preview"
+src=""
+alt="Edit Preview"
+>
+
+</div>
+
+<div class="modal-actions">
+
+<button
+type="button"
+id="closeEditModal"
+>
+
+Cancel
+
+</button>
+
+<button type="submit">
+
+Save Changes
+
+</button>
+
+</div>
+
+</form>
+
+</div>
+
+</div>
+
+<!-- ================= PAST 24 HOURS ================= -->
+
+<section id="past24" class="section">
+
+<h2 class="section-title">
+Past 24 Hours
+</h2>
+
+<div class="items-grid">
+
+{% for item in past_24 %}
+
+<div class="card">
+
+<h3>
+{{ item.title }}
+</h3>
+
+{% if item.image %}
+
+<img
+src="{{ url_for('static', filename='uploads/' + item.image) }}"
+class="item-image"
+alt="Resolved Item"
+>
+
+{% endif %}
+
+<p>
+
+<strong>
+Claimed By:
+</strong>
+
+{{ item.claimed_by }}
+
+</p>
+
+<p>
+
+<strong>
+Pickup Time:
+</strong>
+
+{{ item.pickup_time }}
+
+</p>
+
+<span class="badge Found">
+
+Resolved
+
+</span>
+
+</div>
+
+{% endfor %}
+
+</div>
+
+</section>
+
+<!-- ================= CONTACT ================= -->
+
+<section id="contact" class="contact-section">
+
+<h2 class="section-title">
+Contact Us
+</h2>
+
+<p>
+Email: support@beefound.edu
+</p>
+
+<p>
+Phone: +62 812 3456 7890
+</p>
+
+</section>
+
+<!-- ================= CLAIM MODAL ================= -->
+
+<div id="claimModal" class="modal-overlay">
+
+<div class="modal-box">
+
+<h3>
+Confirm Claim
+</h3>
+
+<p>
+
+If this item does NOT belong to you,
+you may face disciplinary sanctions.
+
+</p>
+
+<div class="modal-actions">
+
+<button
+type="button"
+id="cancelClaim"
+>
+
+Cancel
+
+</button>
+
+<button
+type="button"
+id="confirmClaim"
+>
+
+Yes, This Is Mine
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- ================= TOAST CONTAINER ================= -->
+
+<div id="toastContainer">
+
+</div>
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+<script>
+
+/* ================= AUTO REMOVE FLASH ================= */
+
+setTimeout(function(){
+
+    const flash_messages =
+        document.querySelectorAll(
+            ".flash-message"
+        );
+
+    flash_messages.forEach(
+        function(message){
+
+            message.classList.add(
+                "flash-hide"
+            );
+
+        }
+    );
+
+}, 3500);
+
+</script>
+
+</body>
+
+</html>
