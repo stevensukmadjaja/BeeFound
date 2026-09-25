@@ -38,13 +38,21 @@ app.config[
 
 # ================= DATABASE =================
 
-app.config["SQLALCHEMY_DATABASE_URI"] = (
-    "sqlite:///beefound.db"
-)
+database_url = os.environ["DATABASE_URL"]
 
-app.config[
-    "SQLALCHEMY_TRACK_MODIFICATIONS"
-] = False
+if database_url.startswith("postgresql://"):
+    database_url = database_url.replace(
+        "postgresql://", "postgresql+psycopg2://", 1
+    )
+elif database_url.startswith("postgres://"):
+    database_url = database_url.replace(
+        "postgres://", "postgresql+psycopg2://", 1
+    )
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
+    "pool_pre_ping": True
+}
 
 db = SQLAlchemy(app)
 
@@ -1126,34 +1134,12 @@ def file_too_large(error):
 
     return redirect("/")
 
+# ================= INITIALIZE TABLES =================
+
+with app.app_context():
+    db.create_all()
+
 # ================= RUN =================
 
 if __name__ == "__main__":
-
-    with app.app_context():
-
-        db.create_all()
-
-        admin_exists = User.query.filter_by(
-            username="admin"
-        ).first()
-
-        if not admin_exists:
-
-            admin_user = User(
-
-                username="admin",
-
-                password=generate_password_hash(
-                    "admin123"
-                ),
-
-                role="admin"
-
-            )
-
-            db.session.add(admin_user)
-
-            db.session.commit()
-
-    app.run(debug=True)
+    app.run()
