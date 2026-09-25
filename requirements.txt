@@ -2,3 +2,4 @@ Flask
 Flask-SQLAlchemy
 Werkzeug
 psycopg[binary]
+psycopg2-binary>=2.9,<3
